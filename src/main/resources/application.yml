@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tickety
+    username: keycloak
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8000/auth/realms/tickety
+          jwk-set-uri: http://localhost:8000/realms/tickety/protocol/openid-connect/certs
+
+keycloak:
+  realm: tickety
+  resource: tickety
+  auth-server-url: http://localhost:8000/auth
+  ssl-required: external
+  credentials:
+    secret: wNrjoX16rD8JIlnBLHZkiWKtwhI6sWm5
+  use-resource-role-mappings: true
+  public-client: true
+  confidential-port: 0
+
+security:
+  basic:
+    enabled: false
+
