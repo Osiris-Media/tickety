@@ -1,7 +1,7 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/tickety
-    username: keycloak
+    username: tickety
     password: password
     driver-class-name: org.postgresql.Driver
   jpa:
@@ -31,3 +31,56 @@ security:
   basic:
     enabled: false
 
+server:
+  port: 8080
+
+rate-limit:
+  default:
+    name: ${DEFAULT_RATE_LIMIT_NAME:DEFAULT}
+    max-requests: ${DEFAULT_MAX_REQUESTS:50}
+    refill-in-seconds: ${DEFAULT_REFILL_IN_SECONDS:1}
+
+miscellaneous:
+  max-response-time-to-log-in-ms: ${MAX_RESPONSE_TIME_TO_LOG_IN_MS:1000}
+
+rabbitmq:
+  host: ${RABBITMQ_HOST}
+  port: ${RABBITMQ_PORT}
+  username: ${RABBITMQ_USERNAME}
+  password: ${RABBITMQ_PASSWORD}
+  listeners:
+    event:
+      queue: ${RABBITMQ_LISTENERS_EVENT_QUEUE}
+      prefetch-count: ${RABBITMQ_LISTENERS_EVENT_PREFETCH_COUNT:10}
+  publishers:
+    webhook:
+      exchange: ${RABBITMQ_PUBLISHERS_WEBHOOK_EXCHANGE}
+      routingkey: ${RABBITMQ_PUBLISHERS_WEBHOOK_ROUTING_KEY}
+
+kubernetes:
+  service-name: ${KUBERNETES_SERVICE_NAME:tickety}
+
+management:
+  server:
+    port: 8081
+  info:
+    java:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+        add-additional-paths: true
+    #      group:
+    #       readiness:
+    #         include: rabbit
+
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, preStopHook # prometheus
+
+profiling:
+  pyroscope:
+    enabled: false
+    server: http://pyroscope-local.cloud-diplomats.com

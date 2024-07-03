@@ -31,5 +31,26 @@ services:
     ports:
       - "8000:8080"
 
+  rabbitmq:
+    container_name: tickety-rabbitmq
+    image: bitnami/rabbitmq:3.13.2
+    network_mode: host
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    environment:
+      RABBITMQ_LOAD_DEFINITIONS: "true"
+      # definition is set with -> user: password
+      RABBITMQ_DEFINITIONS_FILE: /etc/rabbitmq/definitions.json
+      RABBITMQ_PLUGINS: rabbitmq_shovel rabbitmq_shovel_management rabbitmq_delayed_message_exchange
+      RABBITMQ_COMMUNITY_PLUGINS: https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/v3.12.0/rabbitmq_delayed_message_exchange-3.12.0.ez
+    volumes:
+      - ./scripts/configs/rabbitmq-definition.json:/etc/rabbitmq/definitions.json
+      - tickety_rabbitmq:/bitnami/rabbitmq/mnesia
+
+
 volumes:
-  tickety_data:
+  tickety_data: {}
+  tickety_rabbitmq: {}
