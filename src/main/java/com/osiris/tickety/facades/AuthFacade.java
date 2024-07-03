@@ -1,6 +1,6 @@
 package com.osiris.tickety.facades;
 
-import com.osiris.tickety.auth.providers.ApiKeyAuthentication;
+import com.osiris.tickety.infra.auth.providers.ApiKeyAuthentication;
 import com.osiris.tickety.exceptions.InternalServerErrorException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;

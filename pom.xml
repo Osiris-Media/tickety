@@ -15,7 +15,38 @@
     <description>tickety</description>
     <properties>
         <java.version>21</java.version>
-        <spring-cloud.version>2023.0.0</spring-cloud.version>
+
+        <!-- Database -->
+        <postgresql.version>42.7.3</postgresql.version>
+        <querydsl.version>5.1.0</querydsl.version>
+        <flyway-database-postgresql.version>10.13.0</flyway-database-postgresql.version>
+        <hypersistence-utils.version>3.7.5</hypersistence-utils.version>
+
+        <!-- Logging -->
+        <logstash.version>7.4</logstash.version>
+
+        <!-- Telemetry -->
+        <opentelemetry-api.version>1.38.0</opentelemetry-api.version>
+        <pyroscope-agent.version>0.14.0</pyroscope-agent.version>
+
+        <!-- Lombok & Mapstruct -->
+        <projectlombok.version>1.18.32</projectlombok.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+
+        <!-- utilities -->
+        <spring-cloud.version>2023.0.1</spring-cloud.version>
+        <bucket4j-core.version>8.10.1</bucket4j-core.version>
+        <slack-api-client.version>1.39.2</slack-api-client.version>
+        <apache-commons-text.version>1.12.0</apache-commons-text.version>
+        <apache-commons-collection.version>4.4</apache-commons-collection.version>
+
+        <!-- Development-->
+        <git-code-format-maven-plugin.version>5.3</git-code-format-maven-plugin.version>
+
+        <!-- Test -->
+        <testcontainers.version>1.19.8</testcontainers.version>
+
     </properties>
     <dependencies>
 
@@ -23,6 +54,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- Web Client -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-reactor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-circuitbreaker</artifactId>
+        </dependency>
+
         <!-- Spring Security & JWT -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -33,60 +80,100 @@
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
 
-        <!-- Web Client -->
+        <!-- Database -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+            <!-- Removed in order to import PSQL exception -->
+            <!-- <scope>runtime</scope> -->
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>io.github.resilience4j</groupId>-->
-<!--            <artifactId>resilience4j-reactor</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.github.resilience4j</groupId>-->
-<!--            <artifactId>resilience4j-circuitbreaker</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>${flyway-database-postgresql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.hypersistence</groupId>
+            <artifactId>hypersistence-utils-hibernate-63</artifactId>
+            <version>${hypersistence-utils.version}</version>
+        </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-         <!-- Databases -->
+        <!-- Database access -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.hypersistence</groupId>
-            <artifactId>hypersistence-utils-hibernate-63</artifactId>
-            <version>3.7.5</version>
-        </dependency>
-        <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            <version>5.1.0</version>
+            <version>${querydsl.version}</version>
             <classifier>jakarta</classifier>
         </dependency>
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
-            <version>5.1.0</version>
+            <version>${querydsl.version}</version>
             <scope>provided</scope>
             <optional>true</optional>
             <classifier>jakarta</classifier>
         </dependency>
+
+        <!-- Telemetry -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-api</artifactId>
+            <version>${opentelemetry-api.version}</version>
+        </dependency>
+
+        <!-- Profiling -->
+        <dependency>
+            <groupId>io.pyroscope</groupId>
+            <artifactId>agent</artifactId>
+            <version>${pyroscope-agent.version}</version>
+        </dependency>
+
+        <!-- Logs json encoder -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash.version}</version>
+        </dependency>
+
+        <!-- Data & Serialization -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+            <version>${projectlombok.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <version>${lombok-mapstruct-binding.version}</version>
+        </dependency>
+
+        <!-- Infra-->
         <!-- Cache -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -101,63 +188,86 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-kubernetes-client</artifactId>
+            <!-- rate limiting -->
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
+            <groupId>com.bucket4j</groupId>
+            <artifactId>bucket4j-core</artifactId>
+            <version>${bucket4j-core.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>7.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>1.5.5.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <version>1.5.5.Final</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok-mapstruct-binding</artifactId>
-            <version>0.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+
+        <!-- Utilities-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.12.0</version>
+            <version>${apache-commons-text.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.4</version>
         </dependency>
-
-        <!-- Profiling -->
         <dependency>
-            <groupId>io.pyroscope</groupId>
-            <artifactId>agent</artifactId>
-            <version>0.14.0</version>
+            <groupId>com.slack.api</groupId>
+            <artifactId>slack-api-client</artifactId>
+            <version>${slack-api-client.version}</version>
         </dependency>
+
+        <!-- Development tools -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Testing libraries -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <!-- exclude junit 4 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>rabbitmq</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -180,19 +290,149 @@
 
     <build>
         <plugins>
+
+            <!-- Unit tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+
+            <!-- Integration tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+
+            <!-- Add SBOM specification for application security contexts and supply chain component analysis. -->
+            <plugin>
+                <groupId>org.cyclonedx</groupId>
+                <artifactId>cyclonedx-maven-plugin</artifactId>
+            </plugin>
+
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
+                    <image>
+                        <env>
+                            <BP_JVM_VERSION>21</BP_JVM_VERSION>
+                        </env>
+                        <createdDate>${maven.build.timestamp}</createdDate>
+                        <bindings>
+                            <binding>
+                                ${project.basedir}/opentelemetry:/workspace/opentelemetry
+                            </binding>
+                        </bindings>
+                    </image>
                 </configuration>
             </plugin>
+
+            <!-- SPRING_PROFILES_ACTIVE=dev mvn clean -Pnative -DskipTests spring-boot:build-image -->
+            <!-- uncomment if you want to compile with native profile -->
+            <!-- <plugin> -->
+            <!--   <groupId>org.graalvm.buildtools</groupId> -->
+            <!--   <artifactId>native-maven-plugin</artifactId> -->
+            <!-- </plugin> -->
+
+            <!-- <plugin> -->
+            <!--   <groupId>org.springframework.boot</groupId> -->
+            <!--   <artifactId>spring-boot-maven-plugin</artifactId> -->
+            <!--   <configuration> -->
+            <!--     <image> -->
+            <!--       &lt;!&ndash; Default (build and run as non-root (runAsUser: 1000)) &ndash;&gt; -->
+            <!--       &lt;!&ndash; <builder>paketobuildpacks/builder-jammy-base:</builder> &ndash;&gt; -->
+            <!--       &lt;!&ndash; Native &ndash;&gt; -->
+            <!--       &lt;!&ndash; <builder>paketobuildpacks/builder-jammy-tiny:latest</builder> &ndash;&gt; &lt;!&ndash; already set in parent native profile &ndash;&gt; -->
+            <!--        -->
+            <!--       <env> -->
+            <!--         &lt;!&ndash; <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE> &ndash;&gt; &lt;!&ndash; already set in parent with native profile &ndash;&gt; -->
+            <!--         &lt;!&ndash; <BP_NATIVE_IMAGE_BUILD_ARGUMENTS> &ndash;&gt; -->
+            <!--         &lt;!&ndash;   -H:+AddAllCharsets &ndash;&gt; -->
+            <!--         &lt;!&ndash;   -H:+ReportExceptionStackTraces &ndash;&gt; -->
+            <!--         &lt;!&ndash;   -H:+UnlockExperimentalVMOptions &ndash;&gt; -->
+            <!--         &lt;!&ndash;    &ndash;&gt; -->
+            <!--         &lt;!&ndash;   -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json &ndash;&gt; -->
+            <!--         &lt;!&ndash;    &ndash;&gt; -->
+            <!--         &lt;!&ndash;   -initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils &ndash;&gt; -->
+            <!--         &lt;!&ndash;   -initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC &ndash;&gt; -->
+            <!--         &lt;!&ndash; </BP_NATIVE_IMAGE_BUILD_ARGUMENTS> &ndash;&gt; -->
+            <!--         <BP_JVM_VERSION>21</BP_JVM_VERSION> -->
+            <!--       </env> -->
+            <!--       <createdDate>${maven.build.timestamp}</createdDate> -->
+            <!--     </image> -->
+            <!--   </configuration> -->
+            <!-- </plugin> -->
+
+            <!-- Code formatting hooks -->
+            <plugin>
+                <groupId>com.cosium.code</groupId>
+                <artifactId>git-code-format-maven-plugin</artifactId>
+                <version>${git-code-format-maven-plugin.version}</version>
+                <executions>
+                    <!-- On commit, format the modified files -->
+                    <execution>
+                        <id>install-formatter-hook</id>
+                        <goals>
+                            <goal>install-hooks</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>validate-code-format</id>
+                        <goals>
+                            <goal>validate-code-format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.cosium.code</groupId>
+                        <artifactId>google-java-format</artifactId>
+                        <version>${git-code-format-maven-plugin.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
         </plugins>
     </build>
+    <!-- (you don't need this if you are using a .RELEASE version) -->
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
